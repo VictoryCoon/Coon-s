@@ -6,6 +6,52 @@
 <%@ page import="java.util.Calendar" %>
 <script>
 
+/* 정책사항 */
+function openPolicy() {
+	$(".policy").fadeIn();
+	$("#signFrame").fadeIn();
+}
+function closePolicy() {
+ 	$("input[id=item1]").attr("checked",false);
+	$("input[id=item2]").attr("checked",false);
+	$("input[id=item3]").attr("checked",false);
+	
+	$(".policy").fadeOut();
+	$("#signFrame").fadeOut();
+}
+
+function disAgree() {
+ 	$("input[id=item1]").attr("checked",false);
+	$("input[id=item2]").attr("checked",false);
+	$("input[id=item3]").attr("checked",false);
+	
+	$(".policy").fadeOut();
+	$("#signFrame").fadeOut();
+}
+
+function agree() {
+	
+	if($("input[id='item1']").is(":checked") == false) {
+		alert($("#term1").text()+"에 동의하지 않았습니다.");
+		return;
+	}
+	
+	if($("input[id='item3']").is(":checked") == false) {
+		alert($("#term2").text()+"에 동의하지 않았습니다.");
+		return;
+	}
+	
+	if($("input[id='item3']").is(":checked") == false) {
+		alert($("#term3").text()+"에 동의하지 않았습니다.");
+		return;
+	}
+	
+	if(confirm("위 사항에 모두 동의하십니까?")){
+		$(".policy").hide();
+		$(".signUp").fadeIn();
+	}
+}
+
 /* 가입창 내리기 */
 function closeSignUp() {
 	$("#joinId").val("");
@@ -30,10 +76,10 @@ function closeSignIn() {
 	$("#signFrame").fadeOut();
 }
 
-function openSignUp() {
+/* function openSignUp() {
 	$(".signUp").fadeIn();
 	$("#signFrame").fadeIn();
-}
+} */
 
 function openSignIn() {
 	$(".signIn").fadeIn();
@@ -180,6 +226,29 @@ function signUp() {
 	<input type="hidden" id="signParam6" name="mobile"/>
 </form>
 <section class="signFrame" id="signFrame" style="display:none;">
+	<div class="policy" style="display:none;">
+		<span class="closeBox" onclick="javascript:closePolicy();"></span>
+		<div class="items">
+			<h1>1. <span id="term1">Terms A</span></h1>
+			<textarea id="termA" style="resize:none;"></textarea>
+			<input type="checkbox" id="item1"name="item1"/><span>상기 명시된 내용에 동의합니다.</span>
+		</div>
+		<div class="items">
+			<h1>2. <span id="term2">Terms B</span></h1>
+			<textarea id="termB" style="resize:none;"></textarea>
+			<input type="checkbox" id="item2"name="item2"/><span>상기 명시된 내용에 동의합니다.</span>
+		</div>
+		<div class="items">
+			<h1>3. <span id="term3">Terms C</span></h1>
+			<textarea id="termC" style="resize:none;"></textarea>
+			<input type="checkbox" id="item3"name="item3"/><span>상기 명시된 내용에 동의합니다.</span>
+		</div>
+		<div class="btns">
+			<button id="disagree" onclick="javascript:disAgree();">Disagree</button>
+			&nbsp;
+			<button id="agree" onclick="javascript:agree();">Agree</button>
+		</div>
+	</div>
 	<div class="signUp" style="display:none;">
 		<span class="closeBox" onclick="javascript:closeSignUp();"></span>
 		<h1>Sign - Up</h1>

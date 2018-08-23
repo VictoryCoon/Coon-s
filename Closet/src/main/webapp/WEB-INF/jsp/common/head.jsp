@@ -46,7 +46,8 @@ $(document).ready(function(){
 	});
 
 	$("#sign_up").click(function(){
-		openSignUp();
+		//openSignUp();
+		openPolicy();
 	});
 	
 	$("#sign_in").click(function(){
