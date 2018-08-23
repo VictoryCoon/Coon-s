@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.closet.service.UserDao">
+	<!-- 로그인 체크 -->
+    <select id="signIn" resultType="String">
+    	SELECT LOGIN_ID AS loginId
+    	     , USER_PW AS userPw
+    	     , BANK_CD AS bankCd
+    	     , BANK_NAME AS bankName
+    	     , CLOSET_CD AS closetCd
+    	     , CLOSET_NAME AS closetName
+    	  FROM USERS
+		 WHERE LOGIN_ID = #{loginId}
+		   AND USER_PW = ENCRYPT_PKG.ENC_PWD(#{userPw})
+		   AND STATUS = '1'<!-- TEST = 0 -->
+    </select>
+    <!-- 로그인 성공 후 세션정보 호출 -->
+    <select id="viewUser" resultType="com.project.closet.dto.UserDto">
+    	SELECT USER_ID AS userId
+    	     , USER_NAME AS userName
+    	     , ENCRYPT_PKG.KAIDOKU_PASSWD(USER_PW) AS userPw
+    	     , MOBILE AS mobile
+    	     , ADDRESS AS address
+    	     , CASH AS cash
+    	     , CASH_ACC_AMT AS cashAccAmt
+    	     , CASH_LAST_DATE AS cashLastDate
+    	     , LOGIN_ID AS loginId
+    	     , USER_PW AS userPw
+    	     , BANK_CD AS bankCd
+    	     , BANK_NAME AS bankName
+    	     , CLOSET_CD AS closetCd
+    	     , CLOSET_NAME AS closetName
+    	  FROM USERS
+		 WHERE LOGIN_ID = #{loginId}
+		   AND STATUS = '1'<!-- TEST = 0 -->
+		   <!-- AND USER_PW = ENCRYPT_PKG.ENC_PWD(#{userPw}) -->
+    </select>
+    <!-- 프로시져 : 회원등록 실행 -->
+    <resultMap id="userInsOutput" type="hashmap"></resultMap>
+    <!-- 시발 좀 되라... -->
+    <select id="userIns" statementType="CALLABLE">
+    	{
+    		CALL USERS_PKG.User_Ins_Pr(
+    			#{SP_User_Name},
+    			#{SP_Birthday},
+    			#{SP_Birth_Kind},
+    			#{SP_Login_Id},
+    			#{SP_User_Pw},
+    			#{SP_Mobile},
+    			#{SP_ReturnCode, mode=OUT, jdbcType=VARCHAR, javaType=ResultSet, resultMap=userInsOutput },
+    			#{SP_ReturnMsg, mode=OUT, jdbcType=VARCHAR, javaType=ResultSet, resultMap=userInsOutput }
+    		)
+    	}
+    </select>
+    <update id="updateMobile">
+    	UPDATE USERS
+    	   SET MOBILE = #{mobile}
+    	 WHERE LOGIN_ID = #{loginId}
+    	   AND STATUS = '1'
+    </update>
+    <update id="updatePassword">
+    	UPDATE USERS
+    	   SET USER_PW = ENCRYPT_PKG.ENC_PWD(#{userPw})
+    	 WHERE LOGIN_ID = #{loginId}
+    	   AND STATUS = '1'
+    </update>
+    <update id="userDrop">
+    	UPDATE USERS
+    	   SET STATUS = '0'	<!-- 활성 : 1, 비활성 : 0 -->
+    	     , REMARK = #{remark}
+    	 WHERE LOGIN_ID = #{loginId}
+    	   AND STATUS = '1'
+    </update>
+</mapper>
