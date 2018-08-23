@@ -114,7 +114,6 @@ $(document).ready(function(){
 	<div class="limitWidth">
 		<ul>
 			<li class="logo" id="logo"></li>
-			<!-- <li class="about" id="about"></li> -->
 			<li class="board" id="board"></li>
 			<li class="cService" id="cService"></li>
 			<% if(request.getRequestURI().indexOf("/board/") != -1) { %>
